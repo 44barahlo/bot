@@ -1,7 +1,12 @@
 import { open } from 'lmdb'
 import { Telegraf } from 'telegraf'
+
 const token = Deno.env.get('BOT_TOKEN')
+
 const bot = new Telegraf(token || '')
+
+const ADMIN_ID = parseInt(Deno.env.get('ADMIN_ID') || '0');
+
 const database = open({
     path: 'database',
     // any options go here, we can turn on compression like this:
@@ -36,6 +41,10 @@ bot.on('inline_query', async (ctx) => {
 })
 
 bot.on('voice', async (ctx) => {
+    // ignore if it is not admin
+    if (ctx.from.id != ADMIN_ID)
+        return;
+
     const unique_id = ctx.message.voice.file_id;
     let title = 'Пусто'
     let caption = 'Пусто'
@@ -75,6 +84,10 @@ bot.command('list', async (ctx) => {
 });
 
 bot.command('delete', async (ctx) => {
+    // ignore if it is not admin
+    if (ctx.from.id != ADMIN_ID)
+        return;
+
     if (ctx.message.reply_to_message && ctx.message.reply_to_message.voice) {
         const file_id = ctx.message.reply_to_message.voice.file_id;
         
@@ -130,6 +143,10 @@ bot.command('help', (ctx) => {
 
 // Handle replies to edit voice message information
 bot.on('text', async (ctx) => {
+    // ignore if it is not admin
+    if (ctx.from.id != ADMIN_ID)
+        return;
+    
     // Check if the message is a reply to another message
     if (ctx.message.reply_to_message && ctx.message.reply_to_message.voice) {
         const file_id = ctx.message.reply_to_message.voice.file_id;
