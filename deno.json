@@ -1,0 +1,11 @@
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "telegraf": "npm:telegraf@4.16.3",
+    "lmdb": "npm:lmdb@3.1.4"
+  },
+  "nodeModulesDir": "auto"
+}
